@@ -1,13 +1,17 @@
-import type { Page } from "../types";
+import { useState } from "react";
+import type { MenuItem, Page } from "../types";
 import { useSpecialties } from "../hooks/useSpecialties";
+import { assetUrl } from "../lib/assetUrl";
 import { Btn } from "../app/components/common/Btn";
 import { DecorativeLine } from "../app/components/common/DecorativeLine";
 import { Wave } from "../app/components/common/Wave";
 import { ProductCard } from "../app/components/common/ProductCard";
+import { ProductModal } from "../app/components/common/ProductModal";
 import { LeafIcon } from "../app/components/icons";
 
 export function HomePage({ setPage }: { setPage: (p: Page) => void }) {
   const { specialties, loading } = useSpecialties();
+  const [selected, setSelected] = useState<MenuItem | null>(null);
   const go = (key: Page) => {
     setPage(key);
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -18,7 +22,7 @@ export function HomePage({ setPage }: { setPage: (p: Page) => void }) {
         {/* ── Hero ── */}
         <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-foreground">
         <video
-          src="/videos/hero.mov"
+          src={assetUrl("videos/hero.mov")}
           className="absolute inset-0 w-full h-full object-cover opacity-60"
           autoPlay
           muted
@@ -74,7 +78,9 @@ export function HomePage({ setPage }: { setPage: (p: Page) => void }) {
             {loading ? (
               <p className="col-span-full text-center text-muted-foreground">Cargando...</p>
             ) : (
-              specialties.map((item) => <ProductCard key={item.name} item={item} />)
+              specialties.map((item) => (
+                <ProductCard key={item.name} item={item} onClick={() => setSelected(item)} />
+              ))
             )}
           </div>
 
@@ -104,6 +110,8 @@ export function HomePage({ setPage }: { setPage: (p: Page) => void }) {
       </section>
 
       <Wave containerClass="bg-background" fillClass="text-foreground" />
+
+      {selected && <ProductModal item={selected} onClose={() => setSelected(null)} />}
     </>
   );
 }

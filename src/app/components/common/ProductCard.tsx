@@ -1,13 +1,19 @@
 import type { MenuItem } from "../../../types";
+import { assetUrl } from "../../../lib/assetUrl";
 import { LeafIcon } from "../icons";
 
-export function ProductCard({ item }: { item: MenuItem }) {
+export function ProductCard({ item, onClick }: { item: MenuItem; onClick?: () => void }) {
   return (
-    <article className="bg-card rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 group flex flex-col border border-border/40">
+    <article
+      onClick={onClick}
+      className={`bg-card rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 group flex flex-col border border-border/40 ${
+        onClick ? "cursor-pointer active:scale-[0.98]" : ""
+      }`}
+    >
       <div className="relative h-52 overflow-hidden bg-muted shrink-0">
         {item.image ? (
           <img
-            src={item.image}
+            src={assetUrl(item.image)}
             alt={item.name}
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
           />

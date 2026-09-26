@@ -1,9 +1,10 @@
 import { useState } from "react";
-import type { MenuTab } from "../types";
+import type { MenuItem, MenuTab } from "../types";
 import { MENU_BY_TAB, MENU_TABS } from "../data/menuData";
 import { DecorativeLine } from "../app/components/common/DecorativeLine";
 import { Wave } from "../app/components/common/Wave";
 import { MenuItemCard } from "../app/components/common/MenuItemCard";
+import { ProductModal } from "../app/components/common/ProductModal";
 import { HotCupIcon, IcedCupIcon, PlateIcon } from "../app/components/icons";
 
 const TAB_ICONS: Record<MenuTab, (small: boolean) => React.ReactNode> = {
@@ -18,6 +19,7 @@ const TAB_ICONS: Record<MenuTab, (small: boolean) => React.ReactNode> = {
 
 export function MenuPage() {
   const [tab, setTab] = useState<MenuTab>("calientes");
+  const [selected, setSelected] = useState<MenuItem | null>(null);
 
   const activeTab = MENU_TABS.find((t) => t.key === tab)!;
 
@@ -79,12 +81,14 @@ export function MenuPage() {
       <div className="max-w-4xl mx-auto px-6 pt-6 pb-20">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {MENU_BY_TAB[tab].map((item) => (
-            <MenuItemCard key={item.name} item={item} />
+            <MenuItemCard key={item.name} item={item} onClick={() => setSelected(item)} />
           ))}
         </div>
       </div>
 
       <Wave containerClass="bg-background" fillClass="text-foreground" />
+
+      {selected && <ProductModal item={selected} onClose={() => setSelected(null)} />}
     </div>
   );
 }

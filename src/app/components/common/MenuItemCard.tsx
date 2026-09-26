@@ -1,13 +1,19 @@
 import type { MenuItem } from "../../../types";
+import { assetUrl } from "../../../lib/assetUrl";
 import { LeafIcon } from "../icons";
 
-export function MenuItemCard({ item }: { item: MenuItem }) {
+export function MenuItemCard({ item, onClick }: { item: MenuItem; onClick?: () => void }) {
   return (
-    <article className="flex gap-4 p-4 bg-card rounded-2xl border border-border/40 shadow-sm hover:shadow-md transition-all duration-200 group">
+    <article
+      onClick={onClick}
+      className={`flex gap-4 p-4 bg-card rounded-2xl border border-border/40 shadow-sm hover:shadow-md transition-all duration-200 group ${
+        onClick ? "cursor-pointer active:scale-[0.98]" : ""
+      }`}
+    >
       <div className="w-20 h-20 rounded-xl overflow-hidden shrink-0 bg-muted flex items-center justify-center">
         {item.image ? (
           <img
-            src={item.image}
+            src={assetUrl(item.image)}
             alt={item.name}
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
           />
